@@ -1,0 +1,2421 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/App.tsx b/App.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..3d509bd2c2a1cb75d70c1e82ebbb790592891999
+--- /dev/null
++++ b/App.tsx
+@@ -0,0 +1,16 @@
++import React from 'react';
++import { SafeAreaProvider } from 'react-native-safe-area-context';
++import AppNavigator from './src/navigation/AppNavigator';
++import { LookProvider } from './src/providers/LookProvider';
++
++const App: React.FC = () => {
++  return (
++    <SafeAreaProvider>
++      <LookProvider>
++        <AppNavigator />
++      </LookProvider>
++    </SafeAreaProvider>
++  );
++};
++
++export default App;
+diff --git a/README.md b/README.md
+index e9994bbf45c4ee748b319f161e9b78a8146c8f3a..6edee5131869aee7b3dcd7750359678fc6c2b2cf 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,50 @@
+-HOLAA
++# Holoskin
++
++Holoskin es un asistente de maquillaje 100% enfocado en beauty, construido con **React Native + Expo** para funcionar en iOS y Android. Permite crear looks personalizados, generar propuestas automáticas según evento y momento del día, probarlos virtualmente y gestionarlos desde la app.
++
++## Características principales
++
++- **Registro de perfil** con tono de piel, subtono, tipo de piel, preferencias de estilo y notas.
++- **Constructor manual de looks** con selección de Base, Corrector, Sombras, Blush, Eyeliner y Labial usando paletas visuales mock.
++- **Generador automático** por evento (Boda, Bautizo, Almuerzo familiar, Fiesta de día/noche, Discoteca, Reunión importante) y momento (Día/Noche) utilizando datos JSON de ejemplo.
++- **Gestión de looks**: guardar, editar, duplicar, eliminar y transformar un look de día a versión noche basándose en recomendaciones automáticas.
++- **Tutorial paso a paso** y **modo prueba virtual** con cámara frontal para visualizar el maquillaje como overlay.
++- **Navegación con bottom tabs** (Perfil / Crear look / Mis looks) y pila para detalle de cada look.
++- **Datos mock** para tonos, productos, moodboards e instrucciones.
++
++## Requisitos
++
++- Node.js 18+
++- npm, pnpm o yarn
++- Expo CLI (`npm install -g expo-cli`)
++
++## Puesta en marcha
++
++```bash
++npm install
++npm run start
++```
++
++Escanea el código QR con la app Expo Go en iOS o Android para previsualizar Holoskin. También puedes lanzar el emulador con `npm run android` o `npm run ios`.
++
++## Estructura de carpetas
++
++```
++├── App.tsx
++├── app.json
++├── assets/
++├── src/
++│   ├── components/
++│   ├── data/
++│   ├── navigation/
++│   ├── providers/
++│   ├── screens/
++│   └── types/
++└── README.md
++```
++
++## Notas
++
++- Los archivos en `src/data` contienen la información mock utilizada por la app.
++- El modo prueba virtual usa `expo-camera`; recuerda aceptar permisos desde Expo Go.
++- Esta base es extensible para conectar con APIs reales de productos o looks profesionales.
+diff --git a/app.json b/app.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..6a50fcb9cc7518cd98dec3c0c5ed5152acf6d5df
+--- /dev/null
++++ b/app.json
+@@ -0,0 +1,33 @@
++{
++  "expo": {
++    "name": "Holoskin",
++    "slug": "holoskin",
++    "version": "1.0.0",
++    "orientation": "portrait",
++    "icon": "./assets/icon.png",
++    "userInterfaceStyle": "light",
++    "splash": {
++      "image": "./assets/splash.png",
++      "resizeMode": "contain",
++      "backgroundColor": "#fdf8f5"
++    },
++    "updates": {
++      "fallbackToCacheTimeout": 0
++    },
++    "assetBundlePatterns": [
++      "**/*"
++    ],
++    "ios": {
++      "supportsTablet": true
++    },
++    "android": {
++      "adaptiveIcon": {
++        "foregroundImage": "./assets/adaptive-icon.png",
++        "backgroundColor": "#fdf8f5"
++      }
++    },
++    "web": {
++      "favicon": "./assets/favicon.png"
++    }
++  }
++}
+diff --git a/assets/adaptive-icon.png b/assets/adaptive-icon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b31047d29372b812eac502ae7f6eecbf2c372c88
+GIT binary patch
+literal 523
+zcmeAS@N?(olHy`uVBq!ia0vp^4j|0I1|(Ny7T#lEVBG2H;uumf=j}{Kzrzj!uK!Pa
+z1PX*s6ycjN$;ZLb#l=PaMi|?wV_IGv>OT}r=7z^w&JBHaJMa6&Pi*JAUYZ}<U~^u~
+zfaw6E2tyY`GDB*EnZi2;JBDwJia=H#LvzF4Pga*0e=r)b-C$B<+~Kb&JJIa}+XwmM
+zK_)-dWYRVWt>1L#K|@?a;RF5x)&f=;_ISay7aBcJh(<71Fvc;=-SA@K%)JlhIfxr@
+z{9#?f`!C03f#L_g58OV&X(}cDI|W<M>$!#BkIeR4ZMY|Vg^EKUpN0WzpoqnS1EMYg
+zkD3`m1)aNi7(-mCD;ydZTeY_N@UQc)H|H^)V!YdMzv1bDm;{v%yb+uQEOQvAGx#>7
+z|5_E?x~Eoay=8L-+dYQoj9VMd8-5Ivk2ron;sf&?)*8kzCVz&f4YmdHyJxu`Jdw}&
+z`rXupHzv5-M<z1wm_F+yv)Me3?G5pJ_bFDrynA#3%L8d^?h97VuRrt|<F=H+vcdjQ
+Yjf&mDmF2d=z({8BboFyt=akR{0K((NO#lD@
+
+literal 0
+HcmV?d00001
+
+diff --git a/assets/favicon.png b/assets/favicon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b31047d29372b812eac502ae7f6eecbf2c372c88
+GIT binary patch
+literal 523
+zcmeAS@N?(olHy`uVBq!ia0vp^4j|0I1|(Ny7T#lEVBG2H;uumf=j}{Kzrzj!uK!Pa
+z1PX*s6ycjN$;ZLb#l=PaMi|?wV_IGv>OT}r=7z^w&JBHaJMa6&Pi*JAUYZ}<U~^u~
+zfaw6E2tyY`GDB*EnZi2;JBDwJia=H#LvzF4Pga*0e=r)b-C$B<+~Kb&JJIa}+XwmM
+zK_)-dWYRVWt>1L#K|@?a;RF5x)&f=;_ISay7aBcJh(<71Fvc;=-SA@K%)JlhIfxr@
+z{9#?f`!C03f#L_g58OV&X(}cDI|W<M>$!#BkIeR4ZMY|Vg^EKUpN0WzpoqnS1EMYg
+zkD3`m1)aNi7(-mCD;ydZTeY_N@UQc)H|H^)V!YdMzv1bDm;{v%yb+uQEOQvAGx#>7
+z|5_E?x~Eoay=8L-+dYQoj9VMd8-5Ivk2ron;sf&?)*8kzCVz&f4YmdHyJxu`Jdw}&
+z`rXupHzv5-M<z1wm_F+yv)Me3?G5pJ_bFDrynA#3%L8d^?h97VuRrt|<F=H+vcdjQ
+Yjf&mDmF2d=z({8BboFyt=akR{0K((NO#lD@
+
+literal 0
+HcmV?d00001
+
+diff --git a/assets/icon.png b/assets/icon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b31047d29372b812eac502ae7f6eecbf2c372c88
+GIT binary patch
+literal 523
+zcmeAS@N?(olHy`uVBq!ia0vp^4j|0I1|(Ny7T#lEVBG2H;uumf=j}{Kzrzj!uK!Pa
+z1PX*s6ycjN$;ZLb#l=PaMi|?wV_IGv>OT}r=7z^w&JBHaJMa6&Pi*JAUYZ}<U~^u~
+zfaw6E2tyY`GDB*EnZi2;JBDwJia=H#LvzF4Pga*0e=r)b-C$B<+~Kb&JJIa}+XwmM
+zK_)-dWYRVWt>1L#K|@?a;RF5x)&f=;_ISay7aBcJh(<71Fvc;=-SA@K%)JlhIfxr@
+z{9#?f`!C03f#L_g58OV&X(}cDI|W<M>$!#BkIeR4ZMY|Vg^EKUpN0WzpoqnS1EMYg
+zkD3`m1)aNi7(-mCD;ydZTeY_N@UQc)H|H^)V!YdMzv1bDm;{v%yb+uQEOQvAGx#>7
+z|5_E?x~Eoay=8L-+dYQoj9VMd8-5Ivk2ron;sf&?)*8kzCVz&f4YmdHyJxu`Jdw}&
+z`rXupHzv5-M<z1wm_F+yv)Me3?G5pJ_bFDrynA#3%L8d^?h97VuRrt|<F=H+vcdjQ
+Yjf&mDmF2d=z({8BboFyt=akR{0K((NO#lD@
+
+literal 0
+HcmV?d00001
+
+diff --git a/assets/splash.png b/assets/splash.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b31047d29372b812eac502ae7f6eecbf2c372c88
+GIT binary patch
+literal 523
+zcmeAS@N?(olHy`uVBq!ia0vp^4j|0I1|(Ny7T#lEVBG2H;uumf=j}{Kzrzj!uK!Pa
+z1PX*s6ycjN$;ZLb#l=PaMi|?wV_IGv>OT}r=7z^w&JBHaJMa6&Pi*JAUYZ}<U~^u~
+zfaw6E2tyY`GDB*EnZi2;JBDwJia=H#LvzF4Pga*0e=r)b-C$B<+~Kb&JJIa}+XwmM
+zK_)-dWYRVWt>1L#K|@?a;RF5x)&f=;_ISay7aBcJh(<71Fvc;=-SA@K%)JlhIfxr@
+z{9#?f`!C03f#L_g58OV&X(}cDI|W<M>$!#BkIeR4ZMY|Vg^EKUpN0WzpoqnS1EMYg
+zkD3`m1)aNi7(-mCD;ydZTeY_N@UQc)H|H^)V!YdMzv1bDm;{v%yb+uQEOQvAGx#>7
+z|5_E?x~Eoay=8L-+dYQoj9VMd8-5Ivk2ron;sf&?)*8kzCVz&f4YmdHyJxu`Jdw}&
+z`rXupHzv5-M<z1wm_F+yv)Me3?G5pJ_bFDrynA#3%L8d^?h97VuRrt|<F=H+vcdjQ
+Yjf&mDmF2d=z({8BboFyt=akR{0K((NO#lD@
+
+literal 0
+HcmV?d00001
+
+diff --git a/babel.config.js b/babel.config.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..9d89e131194f49640e1ea7511e8693d2e98e6343
+--- /dev/null
++++ b/babel.config.js
+@@ -0,0 +1,6 @@
++module.exports = function (api) {
++  api.cache(true);
++  return {
++    presets: ['babel-preset-expo'],
++  };
++};
+diff --git a/index.js b/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..36792aa0397bb6d9661be29b46e5d68f52bfbe97
+--- /dev/null
++++ b/index.js
+@@ -0,0 +1,6 @@
++import 'react-native-gesture-handler';
++import { registerRootComponent } from 'expo';
++
++import App from './App';
++
++registerRootComponent(App);
+diff --git a/package.json b/package.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..333600028d54f151ab46e250993f015b5b2406c7
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,33 @@
++{
++  "name": "holoskin",
++  "version": "1.0.0",
++  "private": true,
++  "main": "index.js",
++  "scripts": {
++    "start": "expo start",
++    "android": "expo start --android",
++    "ios": "expo start --ios",
++    "web": "expo start --web"
++  },
++  "dependencies": {
++    "@expo/vector-icons": "^13.0.0",
++    "@react-navigation/bottom-tabs": "^6.6.1",
++    "@react-navigation/native": "^6.1.9",
++    "@react-navigation/native-stack": "^6.9.17",
++    "expo": "^50.0.0",
++    "expo-camera": "^14.0.0",
++    "expo-constants": "^15.4.5",
++    "expo-status-bar": "^1.10.0",
++    "react": "18.2.0",
++    "react-native": "0.73.4",
++    "react-native-gesture-handler": "^2.14.0",
++    "react-native-safe-area-context": "^4.8.2",
++    "react-native-screens": "^3.27.0"
++  },
++  "devDependencies": {
++    "@babel/core": "^7.20.0",
++    "@types/react": "~18.2.45",
++    "@types/react-native": "^0.73.1",
++    "typescript": "^5.2.2"
++  }
++}
+diff --git a/src/components/AutoLookGenerator.tsx b/src/components/AutoLookGenerator.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..3606df3d97f4f726ebc86b6051aa1db0f8b7ff8b
+--- /dev/null
++++ b/src/components/AutoLookGenerator.tsx
+@@ -0,0 +1,181 @@
++import React, { useMemo, useState } from 'react';
++import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
++import { AutoLookSuggestion, EventType, LookMoment, ProductCategory } from '../types';
++import { useLookContext } from '../providers/LookProvider';
++
++export type AutoLookGeneratorProps = {
++  onApply: (suggestion: AutoLookSuggestion) => void;
++};
++
++const eventLabels: EventType[] = [
++  'Boda',
++  'Bautizo',
++  'Almuerzo familiar',
++  'Fiesta de día',
++  'Fiesta de noche',
++  'Discoteca',
++  'Reunión importante',
++];
++
++const momentOptions: LookMoment[] = ['Día', 'Noche'];
++
++const AutoLookGenerator: React.FC<AutoLookGeneratorProps> = ({ onApply }) => {
++  const { getAutoSuggestions } = useLookContext();
++  const suggestions = useMemo(() => getAutoSuggestions(), [getAutoSuggestions]);
++
++  const [event, setEvent] = useState<EventType>('Boda');
++  const [moment, setMoment] = useState<LookMoment>('Día');
++
++  const activeSuggestion = suggestions.find((item) => item.event === event && item.moment === moment);
++
++  return (
++    <View style={styles.container}>
++      <Text style={styles.title}>Generar look automático</Text>
++      <Text style={styles.subtitle}>Selecciona evento y momento para que Holoskin te proponga un combo ideal.</Text>
++
++      <Text style={styles.section}>Evento</Text>
++      <View style={styles.rowWrap}>
++        {eventLabels.map((label) => (
++          <TouchableOpacity
++            key={label}
++            style={[styles.chip, event === label && styles.chipActive]}
++            onPress={() => setEvent(label)}
++          >
++            <Text style={[styles.chipText, event === label && styles.chipTextActive]}>{label}</Text>
++          </TouchableOpacity>
++        ))}
++      </View>
++
++      <Text style={styles.section}>Momento</Text>
++      <View style={styles.rowWrap}>
++        {momentOptions.map((option) => (
++          <TouchableOpacity
++            key={option}
++            style={[styles.chip, moment === option && styles.chipActive]}
++            onPress={() => setMoment(option)}
++          >
++            <Text style={[styles.chipText, moment === option && styles.chipTextActive]}>{option}</Text>
++          </TouchableOpacity>
++        ))}
++      </View>
++
++      {activeSuggestion ? (
++        <View style={styles.card}>
++          <Text style={styles.cardTitle}>Mood & propuesta</Text>
++          <Text style={styles.description}>{activeSuggestion.description}</Text>
++          <View style={styles.moodboardRow}>
++            {activeSuggestion.moodboard.map((url) => (
++              <Image
++                key={url}
++                source={{ uri: `${url}?auto=compress&w=160` }}
++                style={styles.moodboardImage}
++                resizeMode="cover"
++              />
++            ))}
++          </View>
++          {(Object.keys(activeSuggestion.selections) as ProductCategory[]).map((category) => (
++            <Text key={category} style={styles.selectionText}>
++              <Text style={styles.selectionLabel}>{category}:</Text> {activeSuggestion.selections[category]?.name}
++            </Text>
++          ))}
++          <TouchableOpacity style={styles.applyButton} onPress={() => onApply(activeSuggestion)}>
++            <Text style={styles.applyText}>Usar este look</Text>
++          </TouchableOpacity>
++        </View>
++      ) : (
++        <View style={styles.card}>
++          <Text style={styles.description}>Pronto añadiremos recomendaciones para esta combinación.</Text>
++        </View>
++      )}
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  container: {
++    gap: 16,
++  },
++  title: {
++    fontSize: 20,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  subtitle: {
++    color: '#6f5a5f',
++  },
++  section: {
++    fontWeight: '600',
++    color: '#3f2a2a',
++    marginTop: 8,
++  },
++  rowWrap: {
++    flexDirection: 'row',
++    flexWrap: 'wrap',
++    gap: 8,
++  },
++  chip: {
++    borderRadius: 16,
++    borderWidth: 1,
++    borderColor: '#ecd9e4',
++    paddingHorizontal: 12,
++    paddingVertical: 6,
++    backgroundColor: '#fff',
++  },
++  chipActive: {
++    borderColor: '#d17ca7',
++    backgroundColor: '#fdf3f8',
++  },
++  chipText: {
++    color: '#6f5a5f',
++  },
++  chipTextActive: {
++    color: '#d17ca7',
++    fontWeight: '700',
++  },
++  card: {
++    backgroundColor: '#fff',
++    borderRadius: 18,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 16,
++    gap: 10,
++  },
++  cardTitle: {
++    fontSize: 16,
++    fontWeight: '700',
++    color: '#3f2a2a',
++  },
++  description: {
++    color: '#6f5a5f',
++  },
++  moodboardRow: {
++    flexDirection: 'row',
++    gap: 10,
++  },
++  moodboardImage: {
++    width: 64,
++    height: 64,
++    borderRadius: 12,
++    backgroundColor: '#f2e7eb',
++  },
++  selectionText: {
++    color: '#533e3e',
++  },
++  selectionLabel: {
++    fontWeight: '600',
++    color: '#3f2a2a',
++  },
++  applyButton: {
++    marginTop: 8,
++    backgroundColor: '#d17ca7',
++    paddingVertical: 12,
++    borderRadius: 14,
++    alignItems: 'center',
++  },
++  applyText: {
++    color: '#fff',
++    fontWeight: '600',
++  },
++});
++
++export default AutoLookGenerator;
+diff --git a/src/components/LookCard.tsx b/src/components/LookCard.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..aad5d8ea94f6334f4bb4a2bb02bfa7efc92bf427
+--- /dev/null
++++ b/src/components/LookCard.tsx
+@@ -0,0 +1,69 @@
++import React from 'react';
++import { View, Text, TouchableOpacity, StyleSheet, GestureResponderEvent } from 'react-native';
++import { Feather } from '@expo/vector-icons';
++import { Look } from '../types';
++
++export type LookCardProps = {
++  look: Look;
++  onPress: () => void;
++  onDuplicate: () => void;
++};
++
++const LookCard: React.FC<LookCardProps> = ({ look, onPress, onDuplicate }) => (
++  <TouchableOpacity style={styles.card} onPress={onPress}>
++    <View style={styles.headerRow}>
++      <Text style={styles.title}>{look.name}</Text>
++      <TouchableOpacity
++        onPress={(event: GestureResponderEvent) => {
++          event.stopPropagation();
++          onDuplicate();
++        }}
++        style={styles.iconButton}
++      >
++        <Feather name="copy" size={18} color="#d17ca7" />
++      </TouchableOpacity>
++    </View>
++    <Text style={styles.meta}>
++      {look.mode === 'manual' ? 'Look manual' : `Look automático · ${look.event ?? ''}`}
++    </Text>
++    <Text style={styles.meta}>Momento: {look.moment}</Text>
++    <Text style={styles.date}>Actualizado {new Date(look.updatedAt).toLocaleDateString()}</Text>
++  </TouchableOpacity>
++);
++
++const styles = StyleSheet.create({
++  card: {
++    backgroundColor: '#fff',
++    borderRadius: 18,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 18,
++    gap: 8,
++  },
++  headerRow: {
++    flexDirection: 'row',
++    justifyContent: 'space-between',
++    alignItems: 'center',
++  },
++  title: {
++    fontSize: 16,
++    fontWeight: '700',
++    color: '#3f2a2a',
++    flex: 1,
++    marginRight: 8,
++  },
++  iconButton: {
++    padding: 6,
++    borderRadius: 12,
++    backgroundColor: '#fdf3f8',
++  },
++  meta: {
++    color: '#6f5a5f',
++  },
++  date: {
++    color: '#b08d99',
++    fontSize: 12,
++  },
++});
++
++export default LookCard;
+diff --git a/src/components/ManualLookBuilder.tsx b/src/components/ManualLookBuilder.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..743afb205b281630c35ce84c97e8179fe7f97f86
+--- /dev/null
++++ b/src/components/ManualLookBuilder.tsx
+@@ -0,0 +1,36 @@
++import React from 'react';
++import { View, StyleSheet } from 'react-native';
++import { LookSelection, ProductCategory, ProductOption } from '../types';
++import { useLookContext, getProductCategories } from '../providers/LookProvider';
++import ProductPalette from './ProductPalette';
++
++export type ManualLookBuilderProps = {
++  selections: LookSelection;
++  onSelect: (category: ProductCategory, product: ProductOption) => void;
++};
++
++const ManualLookBuilder: React.FC<ManualLookBuilderProps> = ({ selections, onSelect }) => {
++  const { productOptions } = useLookContext();
++
++  return (
++    <View style={styles.container}>
++      {getProductCategories().map((category) => (
++        <ProductPalette
++          key={category}
++          title={category}
++          items={productOptions[category]}
++          selectedId={selections[category]?.id}
++          onSelect={(product) => onSelect(category, product)}
++        />
++      ))}
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  container: {
++    gap: 20,
++  },
++});
++
++export default ManualLookBuilder;
+diff --git a/src/components/ProductPalette.tsx b/src/components/ProductPalette.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..5a4bbec4c522721e935f881f9b9e27e27aaea274
+--- /dev/null
++++ b/src/components/ProductPalette.tsx
+@@ -0,0 +1,86 @@
++import React from 'react';
++import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
++import { ProductOption } from '../types';
++
++type ProductPaletteProps = {
++  title: string;
++  items: ProductOption[];
++  selectedId?: string | null;
++  onSelect: (item: ProductOption) => void;
++};
++
++const ProductPalette: React.FC<ProductPaletteProps> = ({ title, items, selectedId, onSelect }) => (
++  <View style={styles.container}>
++    <Text style={styles.title}>{title}</Text>
++    <View style={styles.row}>
++      {items.map((item) => {
++        const isSelected = selectedId === item.id;
++        return (
++          <TouchableOpacity
++            key={item.id}
++            style={[styles.card, isSelected && styles.cardActive]}
++            onPress={() => onSelect(item)}
++          >
++            <View style={[styles.colorPreview, item.hex ? { backgroundColor: item.hex } : styles.outlinePreview]} />
++            <Text style={styles.name}>{item.name}</Text>
++            <Text style={styles.brand}>{item.brand}</Text>
++            {item.finish ? <Text style={styles.finish}>{item.finish}</Text> : null}
++          </TouchableOpacity>
++        );
++      })}
++    </View>
++  </View>
++);
++
++const styles = StyleSheet.create({
++  container: {
++    gap: 12,
++  },
++  title: {
++    fontSize: 16,
++    fontWeight: '600',
++    color: '#3f2a2a',
++  },
++  row: {
++    flexDirection: 'row',
++    flexWrap: 'wrap',
++    gap: 12,
++  },
++  card: {
++    width: '48%',
++    backgroundColor: '#ffffff',
++    borderRadius: 16,
++    padding: 14,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    gap: 8,
++  },
++  cardActive: {
++    borderColor: '#d17ca7',
++    backgroundColor: '#fdf3f8',
++  },
++  colorPreview: {
++    width: '100%',
++    height: 42,
++    borderRadius: 12,
++  },
++  outlinePreview: {
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++  },
++  name: {
++    fontWeight: '600',
++    color: '#533e3e',
++  },
++  brand: {
++    color: '#8a7078',
++    fontSize: 12,
++  },
++  finish: {
++    color: '#d17ca7',
++    fontSize: 12,
++    fontWeight: '500',
++  },
++});
++
++export default ProductPalette;
+diff --git a/src/components/ProfileForm.tsx b/src/components/ProfileForm.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..c9e633296637371f2001bccf22d3dbd13942325a
+--- /dev/null
++++ b/src/components/ProfileForm.tsx
+@@ -0,0 +1,227 @@
++import React, { useMemo, useState } from 'react';
++import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
++import { useLookContext } from '../providers/LookProvider';
++import { Profile, SkinTone, UndertoneOption } from '../types';
++
++const SectionLabel: React.FC<{ title: string }> = ({ title }) => <Text style={styles.sectionLabel}>{title}</Text>;
++
++type OptionPillProps<T> = {
++  item: T;
++  label: string;
++  isActive: boolean;
++  onSelect: (value: T) => void;
++};
++
++const OptionPill = <T,>({ item, label, isActive, onSelect }: OptionPillProps<T>) => (
++  <TouchableOpacity
++    onPress={() => onSelect(item)}
++    style={[styles.pill, isActive && styles.pillActive]}
++  >
++    <Text style={[styles.pillText, isActive && styles.pillTextActive]}>{label}</Text>
++  </TouchableOpacity>
++);
++
++type ProfileFormProps = {
++  value: Profile;
++  onChange: (profile: Partial<Profile>) => void;
++};
++
++const ProfileForm: React.FC<ProfileFormProps> = ({ value, onChange }) => {
++  const { skinTones, undertones, stylePreferences } = useLookContext();
++  const [selectedPreferences, setSelectedPreferences] = useState<string[]>(value.stylePreferences ?? []);
++
++  React.useEffect(() => {
++    setSelectedPreferences(value.stylePreferences ?? []);
++  }, [value.stylePreferences]);
++
++  const handleTogglePreference = (id: string) => {
++    setSelectedPreferences((prev) => {
++      const exists = prev.includes(id);
++      const updated = exists ? prev.filter((item) => item !== id) : [...prev, id];
++      onChange({ stylePreferences: updated });
++      return updated;
++    });
++  };
++
++  const toneOptions = useMemo(() => skinTones as SkinTone[], [skinTones]);
++  const undertoneOptions = useMemo(() => undertones as UndertoneOption[], [undertones]);
++
++  return (
++    <View style={styles.container}>
++      <SectionLabel title="Nombre" />
++      <TextInput
++        placeholder="Tu nombre o alias"
++        style={styles.input}
++        value={value.name}
++        onChangeText={(text) => onChange({ name: text })}
++      />
++
++      <SectionLabel title="Tono de piel" />
++      <View style={styles.paletteRow}>
++        {toneOptions.map((tone) => {
++          const isActive = value.skinTone?.id === tone.id;
++          return (
++            <TouchableOpacity
++              key={tone.id}
++              style={[styles.toneSwatch, { backgroundColor: tone.hex }, isActive && styles.toneSwatchActive]}
++              onPress={() => onChange({ skinTone: tone })}
++            >
++              <Text style={styles.toneLabel}>{tone.name}</Text>
++            </TouchableOpacity>
++          );
++        })}
++      </View>
++
++      <SectionLabel title="Subtono" />
++      <View style={styles.rowWrap}>
++        {undertoneOptions.map((item) => (
++          <OptionPill
++            key={item.id}
++            item={item}
++            label={item.name}
++            isActive={value.undertone?.id === item.id}
++            onSelect={(undertone) => onChange({ undertone })}
++          />
++        ))}
++      </View>
++
++      <SectionLabel title="Tipo de piel" />
++      <View style={styles.rowWrap}>
++        {['Seca', 'Mixta', 'Grasa', 'Normal', 'Sensible'].map((type) => (
++          <OptionPill
++            key={type}
++            item={type}
++            label={type}
++            isActive={value.skinType === type}
++            onSelect={(skinType) => onChange({ skinType })}
++          />
++        ))}
++      </View>
++
++      <SectionLabel title="Preferencias de estilo" />
++      <View style={styles.rowWrap}>
++        {stylePreferences.map((pref) => (
++          <TouchableOpacity
++            key={pref.id}
++            style={[styles.chip, selectedPreferences.includes(pref.id) && styles.chipActive]}
++            onPress={() => handleTogglePreference(pref.id)}
++          >
++            <Text
++              style={[styles.chipText, selectedPreferences.includes(pref.id) && styles.chipTextActive]}
++            >
++              {pref.label}
++            </Text>
++          </TouchableOpacity>
++        ))}
++      </View>
++
++      <SectionLabel title="Notas" />
++      <TextInput
++        style={[styles.input, styles.notesInput]}
++        placeholder="Alergias, favoritos, recordatorios"
++        multiline
++        numberOfLines={3}
++        value={value.notes}
++        onChangeText={(text) => onChange({ notes: text })}
++      />
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  container: {
++    gap: 16,
++  },
++  sectionLabel: {
++    fontSize: 16,
++    fontWeight: '600',
++    color: '#3f2a2a',
++    marginBottom: 4,
++  },
++  input: {
++    borderWidth: 1,
++    borderColor: '#f0dfe0',
++    borderRadius: 14,
++    padding: 14,
++    backgroundColor: '#fff',
++    fontSize: 16,
++    color: '#533e3e',
++  },
++  notesInput: {
++    minHeight: 100,
++    textAlignVertical: 'top',
++  },
++  paletteRow: {
++    flexDirection: 'row',
++    flexWrap: 'wrap',
++    gap: 12,
++  },
++  rowWrap: {
++    flexDirection: 'row',
++    flexWrap: 'wrap',
++    gap: 10,
++  },
++  toneSwatch: {
++    width: 90,
++    height: 90,
++    borderRadius: 18,
++    alignItems: 'center',
++    justifyContent: 'flex-end',
++    paddingBottom: 8,
++  },
++  toneSwatchActive: {
++    borderWidth: 2,
++    borderColor: '#d17ca7',
++  },
++  toneLabel: {
++    fontSize: 13,
++    fontWeight: '600',
++    color: '#3f2a2a',
++    backgroundColor: 'rgba(255, 255, 255, 0.75)',
++    paddingHorizontal: 8,
++    paddingVertical: 2,
++    borderRadius: 12,
++  },
++  pill: {
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    borderRadius: 999,
++    paddingHorizontal: 16,
++    paddingVertical: 8,
++    backgroundColor: '#fff',
++  },
++  pillActive: {
++    backgroundColor: '#f6e8f1',
++    borderColor: '#d17ca7',
++  },
++  pillText: {
++    fontSize: 14,
++    color: '#765a64',
++  },
++  pillTextActive: {
++    color: '#d17ca7',
++    fontWeight: '700',
++  },
++  chip: {
++    borderRadius: 16,
++    paddingHorizontal: 14,
++    paddingVertical: 6,
++    backgroundColor: '#fff',
++    borderWidth: 1,
++    borderColor: '#ecd9e4',
++  },
++  chipActive: {
++    backgroundColor: '#d17ca733',
++    borderColor: '#d17ca7',
++  },
++  chipText: {
++    color: '#5f4850',
++    fontSize: 14,
++  },
++  chipTextActive: {
++    color: '#d17ca7',
++    fontWeight: '600',
++  },
++});
++
++export default ProfileForm;
+diff --git a/src/components/TryOnModal.tsx b/src/components/TryOnModal.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..598d5d90d4593efa14f2cd3c19eb373b15d25983
+--- /dev/null
++++ b/src/components/TryOnModal.tsx
+@@ -0,0 +1,150 @@
++import React, { useEffect, useState } from 'react';
++import { Modal, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
++import { CameraView, useCameraPermissions } from 'expo-camera';
++import { LookSelection } from '../types';
++
++const { width } = Dimensions.get('window');
++
++export type TryOnModalProps = {
++  visible: boolean;
++  onClose: () => void;
++  selections: LookSelection;
++};
++
++const TryOnModal: React.FC<TryOnModalProps> = ({ visible, onClose, selections }) => {
++  const [permission, requestPermission] = useCameraPermissions();
++  const [showCamera, setShowCamera] = useState(false);
++
++  useEffect(() => {
++    if (visible && !permission?.granted) {
++      requestPermission();
++    }
++    if (visible) {
++      setShowCamera(true);
++    } else {
++      setShowCamera(false);
++    }
++  }, [visible, permission, requestPermission]);
++
++  const blushColor = selections.Blush?.hex ?? '#ffb3c1';
++  const lipColor = selections.Labial?.hex ?? '#d17ca7';
++  const shadowColor = selections.Sombras?.hex ?? '#b58d94';
++
++  return (
++    <Modal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
++      <View style={styles.overlay}>
++        <View style={styles.card}>
++          <Text style={styles.title}>Modo prueba virtual</Text>
++          <Text style={styles.subtitle}>Superponemos una guía para imaginar el look seleccionado.</Text>
++          <View style={styles.cameraContainer}>
++            {showCamera && permission?.granted ? (
++              <CameraView style={StyleSheet.absoluteFill} facing="front" />
++            ) : (
++              <View style={[StyleSheet.absoluteFill, styles.permissionFallback]}>
++                <Text style={styles.permissionText}>
++                  Concede acceso a la cámara para activar el modo prueba virtual.
++                </Text>
++              </View>
++            )}
++            <View pointerEvents="none" style={styles.overlayContainer}>
++              <View style={[styles.shadowBand, { backgroundColor: `${shadowColor}66` }]} />
++              <View style={[styles.blushCircle, { backgroundColor: `${blushColor}66` }]} />
++              <View style={[styles.blushCircle, styles.blushRight, { backgroundColor: `${blushColor}66` }]} />
++              <View style={[styles.lipShape, { backgroundColor: `${lipColor}99` }]} />
++            </View>
++          </View>
++          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
++            <Text style={styles.closeText}>Cerrar</Text>
++          </TouchableOpacity>
++        </View>
++      </View>
++    </Modal>
++  );
++};
++
++const styles = StyleSheet.create({
++  overlay: {
++    flex: 1,
++    backgroundColor: 'rgba(0,0,0,0.45)',
++    justifyContent: 'center',
++    alignItems: 'center',
++    padding: 24,
++  },
++  card: {
++    width: '100%',
++    backgroundColor: '#fff',
++    borderRadius: 24,
++    padding: 20,
++    gap: 16,
++  },
++  title: {
++    fontSize: 20,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  subtitle: {
++    color: '#6f5a5f',
++  },
++  cameraContainer: {
++    width: '100%',
++    height: width * 1.1,
++    borderRadius: 20,
++    overflow: 'hidden',
++    backgroundColor: '#0f0f0f',
++    position: 'relative',
++  },
++  overlayContainer: {
++    ...StyleSheet.absoluteFillObject,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  shadowBand: {
++    position: 'absolute',
++    top: '32%',
++    width: '66%',
++    height: 60,
++    borderRadius: 30,
++  },
++  blushCircle: {
++    position: 'absolute',
++    width: 110,
++    height: 110,
++    borderRadius: 55,
++    top: '52%',
++    left: '16%',
++  },
++  blushRight: {
++    left: undefined,
++    right: '16%',
++  },
++  lipShape: {
++    position: 'absolute',
++    bottom: '18%',
++    width: '42%',
++    height: 60,
++    borderRadius: 30,
++  },
++  permissionFallback: {
++    alignItems: 'center',
++    justifyContent: 'center',
++    paddingHorizontal: 20,
++    backgroundColor: '#1d1d1d',
++  },
++  permissionText: {
++    color: '#fff',
++    textAlign: 'center',
++  },
++  closeButton: {
++    alignSelf: 'center',
++    paddingHorizontal: 28,
++    paddingVertical: 12,
++    borderRadius: 16,
++    backgroundColor: '#d17ca7',
++  },
++  closeText: {
++    color: '#fff',
++    fontWeight: '600',
++  },
++});
++
++export default TryOnModal;
+diff --git a/src/components/TutorialSteps.tsx b/src/components/TutorialSteps.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..e78a43d3a33298062b962cf42229bf7c964a0542
+--- /dev/null
++++ b/src/components/TutorialSteps.tsx
+@@ -0,0 +1,60 @@
++import React from 'react';
++import { View, Text, StyleSheet } from 'react-native';
++
++type TutorialStepsProps = {
++  steps: string[];
++  title?: string;
++};
++
++const TutorialSteps: React.FC<TutorialStepsProps> = ({ steps, title = 'Tutorial paso a paso' }) => (
++  <View style={styles.container}>
++    <Text style={styles.title}>{title}</Text>
++    {steps.map((step, index) => (
++      <View key={step} style={styles.stepRow}>
++        <View style={styles.badge}>
++          <Text style={styles.badgeText}>{index + 1}</Text>
++        </View>
++        <Text style={styles.stepText}>{step}</Text>
++      </View>
++    ))}
++  </View>
++);
++
++const styles = StyleSheet.create({
++  container: {
++    backgroundColor: '#fff',
++    borderRadius: 20,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 18,
++    gap: 12,
++  },
++  title: {
++    fontSize: 16,
++    fontWeight: '700',
++    color: '#3f2a2a',
++  },
++  stepRow: {
++    flexDirection: 'row',
++    gap: 14,
++    alignItems: 'center',
++  },
++  badge: {
++    width: 30,
++    height: 30,
++    borderRadius: 15,
++    backgroundColor: '#d17ca7',
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  badgeText: {
++    color: '#fff',
++    fontWeight: '700',
++  },
++  stepText: {
++    flex: 1,
++    color: '#6f5a5f',
++  },
++});
++
++export default TutorialSteps;
+diff --git a/src/data/autoLooks.json b/src/data/autoLooks.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..88dd0f76c7463e13defa849dd58b370e8de62991
+--- /dev/null
++++ b/src/data/autoLooks.json
+@@ -0,0 +1,72 @@
++[
++  {
++    "event": "Boda",
++    "moment": "Día",
++    "description": "Look romántico y luminoso con mejillas sonrojadas y labios durazno.",
++    "moodboard": ["https://images.unsplash.com/photo-1500835556837-99ac94a94552", "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9"],
++    "selections": {
++      "Base": "base1",
++      "Corrector": "concealer1",
++      "Sombras": "shadow1",
++      "Blush": "blush1",
++      "Eyeliner": "liner2",
++      "Labial": "lip3"
++    }
++  },
++  {
++    "event": "Boda",
++    "moment": "Noche",
++    "description": "Glow sofisticado con smokey soft marrón y labios vino suave.",
++    "moodboard": ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9", "https://images.unsplash.com/photo-1493119508027-2b584f234d6c"],
++    "selections": {
++      "Base": "base2",
++      "Corrector": "concealer2",
++      "Sombras": "shadow3",
++      "Blush": "blush2",
++      "Eyeliner": "liner1",
++      "Labial": "lip2"
++    }
++  },
++  {
++    "event": "Almuerzo familiar",
++    "moment": "Día",
++    "description": "Piel fresca, ojos sutiles y labios nude para convivencia relajada.",
++    "moodboard": ["https://images.unsplash.com/photo-1509042239860-f550ce710b93"],
++    "selections": {
++      "Base": "base1",
++      "Corrector": "concealer1",
++      "Sombras": "shadow2",
++      "Blush": "blush1",
++      "Eyeliner": "liner2",
++      "Labial": "lip1"
++    }
++  },
++  {
++    "event": "Discoteca",
++    "moment": "Noche",
++    "description": "Impacto glam con cat-eye dramático y labios berry.",
++    "moodboard": ["https://images.unsplash.com/photo-1519741497674-611481863552"],
++    "selections": {
++      "Base": "base2",
++      "Corrector": "concealer2",
++      "Sombras": "shadow3",
++      "Blush": "blush2",
++      "Eyeliner": "liner1",
++      "Labial": "lip2"
++    }
++  },
++  {
++    "event": "Reunión importante",
++    "moment": "Día",
++    "description": "Look profesional con ojos definidos y labios neutros de larga duración.",
++    "moodboard": ["https://images.unsplash.com/photo-1503863265764-26a034bcb176"],
++    "selections": {
++      "Base": "base3",
++      "Corrector": "concealer2",
++      "Sombras": "shadow2",
++      "Blush": "blush1",
++      "Eyeliner": "liner1",
++      "Labial": "lip1"
++    }
++  }
++]
+diff --git a/src/data/productPalettes.json b/src/data/productPalettes.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..db9386ef65b731474a9e4e144b94fe864f5acd12
+--- /dev/null
++++ b/src/data/productPalettes.json
+@@ -0,0 +1,29 @@
++{
++  "Base": [
++    { "id": "base1", "name": "Serum Skin Tint", "brand": "GlowLab", "hex": "#f5d0b5", "finish": "Glow" },
++    { "id": "base2", "name": "Soft Matte Foundation", "brand": "Veluxe", "hex": "#e0b28a", "finish": "Matte" },
++    { "id": "base3", "name": "Hydra Coverage", "brand": "AquaSkin", "hex": "#c98d60", "finish": "Natural" }
++  ],
++  "Corrector": [
++    { "id": "concealer1", "name": "Bright Fix", "brand": "Radiant", "hex": "#f1c4a3" },
++    { "id": "concealer2", "name": "Creamy Conceal", "brand": "SoftBlend", "hex": "#ddb08b" }
++  ],
++  "Sombras": [
++    { "id": "shadow1", "name": "Rose Quartz Palette", "brand": "Aura", "hex": "#d9a1a1" },
++    { "id": "shadow2", "name": "Golden Hour", "brand": "Sunset", "hex": "#c9874f" },
++    { "id": "shadow3", "name": "Smoky Nudes", "brand": "Noir", "hex": "#7b5b54" }
++  ],
++  "Blush": [
++    { "id": "blush1", "name": "Peach Silk", "brand": "Bloom", "hex": "#f7a097" },
++    { "id": "blush2", "name": "Rose Flush", "brand": "Petal", "hex": "#de7c8c" }
++  ],
++  "Eyeliner": [
++    { "id": "liner1", "name": "Precise Felt", "brand": "InkMe", "hex": "#1c1c1c" },
++    { "id": "liner2", "name": "Chocolate Smoke", "brand": "Depth", "hex": "#3d2a23" }
++  ],
++  "Labial": [
++    { "id": "lip1", "name": "Velvet Nude", "brand": "Muse", "hex": "#c07267" },
++    { "id": "lip2", "name": "Berry Glow", "brand": "Muse", "hex": "#8a2f4c" },
++    { "id": "lip3", "name": "Coral Pop", "brand": "Bloom", "hex": "#ff8578" }
++  ]
++}
+diff --git a/src/data/skinData.json b/src/data/skinData.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..80e5e7bfc58b87030d1fd484017a2eca053d773a
+--- /dev/null
++++ b/src/data/skinData.json
+@@ -0,0 +1,22 @@
++{
++  "skinTones": [
++    { "id": "porcelain", "name": "Porcelana", "hex": "#f9e2d2" },
++    { "id": "light", "name": "Clara", "hex": "#f3d0b5" },
++    { "id": "medium", "name": "Media", "hex": "#d8a87b" },
++    { "id": "tan", "name": "Bronce", "hex": "#b97749" },
++    { "id": "deep", "name": "Profunda", "hex": "#6a4022" }
++  ],
++  "undertones": [
++    { "id": "cool", "name": "Frío", "description": "Notas rosadas, venas azules" },
++    { "id": "neutral", "name": "Neutro", "description": "Balance rosado y dorado" },
++    { "id": "warm", "name": "Cálido", "description": "Notas doradas, venas verdosas" },
++    { "id": "olive", "name": "Oliva", "description": "Subtono verdoso oliva" }
++  ],
++  "stylePreferences": [
++    { "id": "clean-girl", "label": "Clean girl" },
++    { "id": "glam", "label": "Glam" },
++    { "id": "glowy", "label": "Glowy" },
++    { "id": "bold", "label": "Bold" },
++    { "id": "natural", "label": "Natural" }
++  ]
++}
+diff --git a/src/data/tutorials.json b/src/data/tutorials.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..38b0567d16970e998cc4a1a13bbe3e46aa017f08
+--- /dev/null
++++ b/src/data/tutorials.json
+@@ -0,0 +1,20 @@
++{
++  "default": [
++    "Prepara la piel con limpieza suave y crema hidratante.",
++    "Aplica primer en la zona T y mejillas para alargar la duración.",
++    "Difumina la base seleccionada con brocha o esponja húmeda.",
++    "Coloca corrector en triángulo invertido y difumina suavemente.",
++    "Sella con polvo traslúcido las áreas que necesiten matificar.",
++    "Trabaja ojos con la paleta seleccionada y termina con máscara.",
++    "Aplica blush en mejillas y difumina hacia sienes.",
++    "Define con eyeliner y rellena labios con el labial elegido.",
++    "Fija con spray y revisa detalles finales."
++  ],
++  "nightBoost": [
++    "Intensifica el color de sombras en la esquina externa del ojo.",
++    "Agrega un delineado más dramático y difumina ligeramente.",
++    "Refuerza el rubor y añade iluminador en pómulos.",
++    "Oscurece el labial con un toque de gloss profundo.",
++    "Finaliza con spray fijador extra para larga duración nocturna."
++  ]
++}
+diff --git a/src/navigation/AppNavigator.tsx b/src/navigation/AppNavigator.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..66d46b825aa09be365605f2ddb6e079c30c9f2e1
+--- /dev/null
++++ b/src/navigation/AppNavigator.tsx
+@@ -0,0 +1,83 @@
++import React from 'react';
++import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
++import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
++import { createNativeStackNavigator } from '@react-navigation/native-stack';
++import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
++import ProfileScreen from '../screens/ProfileScreen';
++import CreateLookScreen from '../screens/CreateLookScreen';
++import MyLooksScreen from '../screens/MyLooksScreen';
++import LookDetailScreen from '../screens/LookDetailScreen';
++
++export type RootStackParamList = {
++  Tabs: undefined;
++  LookDetail: { lookId: string };
++};
++
++const Tab = createBottomTabNavigator();
++const Stack = createNativeStackNavigator<RootStackParamList>();
++
++const TabNavigator = () => (
++  <Tab.Navigator
++    screenOptions={{
++      headerShown: false,
++      tabBarActiveTintColor: '#d17ca7',
++      tabBarInactiveTintColor: '#c3c3c3',
++      tabBarStyle: {
++        backgroundColor: '#ffffff',
++        borderTopColor: '#f0e9e6',
++        height: 70,
++        paddingBottom: 12,
++        paddingTop: 10,
++      },
++    }}
++  >
++    <Tab.Screen
++      name="Perfil"
++      component={ProfileScreen}
++      options={{
++        tabBarIcon: ({ color, size }) => <Feather name="user" size={size} color={color} />,
++      }}
++    />
++    <Tab.Screen
++      name="Crear look"
++      component={CreateLookScreen}
++      options={{
++        tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="palette-outline" size={size} color={color} />,
++      }}
++    />
++    <Tab.Screen
++      name="Mis looks"
++      component={MyLooksScreen}
++      options={{
++        tabBarIcon: ({ color, size }) => <Feather name="heart" size={size} color={color} />,
++      }}
++    />
++  </Tab.Navigator>
++);
++
++const theme = {
++  ...DefaultTheme,
++  colors: {
++    ...DefaultTheme.colors,
++    background: '#fdf8f5',
++  },
++};
++
++const AppNavigator = () => (
++  <NavigationContainer theme={theme}>
++    <Stack.Navigator>
++      <Stack.Screen name="Tabs" component={TabNavigator} options={{ headerShown: false }} />
++      <Stack.Screen
++        name="LookDetail"
++        component={LookDetailScreen}
++        options={{
++          title: 'Detalle del look',
++          headerStyle: { backgroundColor: '#fdf8f5' },
++          headerShadowVisible: false,
++        }}
++      />
++    </Stack.Navigator>
++  </NavigationContainer>
++);
++
++export default AppNavigator;
+diff --git a/src/providers/LookProvider.tsx b/src/providers/LookProvider.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..7b828f533260303340ecdbe434ef25d0de00336d
+--- /dev/null
++++ b/src/providers/LookProvider.tsx
+@@ -0,0 +1,239 @@
++import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
++import productPalettesData from '../data/productPalettes.json';
++import skinData from '../data/skinData.json';
++import autoLooks from '../data/autoLooks.json';
++import tutorials from '../data/tutorials.json';
++import {
++  AutoLookSuggestion,
++  EventType,
++  Look,
++  LookMoment,
++  LookSelection,
++  ProductCategory,
++  ProductOption,
++  Profile,
++} from '../types';
++
++const PRODUCT_CATEGORIES: ProductCategory[] = ['Base', 'Corrector', 'Sombras', 'Blush', 'Eyeliner', 'Labial'];
++
++const productOptionsByCategory: Record<ProductCategory, ProductOption[]> = productPalettesData as Record<
++  ProductCategory,
++  ProductOption[]
++>;
++
++const allProductsFlat = PRODUCT_CATEGORIES.flatMap((category) =>
++  (productOptionsByCategory[category] ?? []).map((option) => ({ ...option, category }))
++);
++
++const getProductOptionById = (id: string): ProductOption | null => {
++  for (const option of allProductsFlat) {
++    if (option.id === id) {
++      const { category, ...rest } = option as ProductOption & { category: ProductCategory };
++      return rest;
++    }
++  }
++  return null;
++};
++
++const buildEmptySelection = (): LookSelection =>
++  PRODUCT_CATEGORIES.reduce<LookSelection>((acc, category) => {
++    acc[category] = null;
++    return acc;
++  }, {} as LookSelection);
++
++const mapSelectionsFromIds = (selectionIds: Record<ProductCategory, string>): LookSelection => {
++  const mapped: LookSelection = buildEmptySelection();
++  PRODUCT_CATEGORIES.forEach((category) => {
++    const id = selectionIds[category];
++    mapped[category] = id ? getProductOptionById(id) : null;
++  });
++  return mapped;
++};
++
++type LookContextValue = {
++  profile: Profile;
++  updateProfile: (profile: Partial<Profile>) => void;
++  productOptions: Record<ProductCategory, ProductOption[]>;
++  skinTones: typeof skinData.skinTones;
++  undertones: typeof skinData.undertones;
++  stylePreferences: typeof skinData.stylePreferences;
++  looks: Look[];
++  saveLook: (look: Omit<Look, 'id' | 'createdAt' | 'updatedAt'>) => Look;
++  updateLook: (id: string, look: Partial<Look>) => void;
++  deleteLook: (id: string) => void;
++  duplicateLook: (id: string) => Look | null;
++  transformLookToNight: (id: string) => Look | null;
++  getAutoSuggestions: () => AutoLookSuggestion[];
++  buildLookFromSuggestion: (suggestion: AutoLookSuggestion, name?: string) => Look;
++};
++
++const LookContext = createContext<LookContextValue | undefined>(undefined);
++
++const defaultProfile: Profile = {
++  name: '',
++  skinTone: null,
++  undertone: null,
++  skinType: null,
++  stylePreferences: [],
++  notes: '',
++};
++
++let suggestionCache: AutoLookSuggestion[] | null = null;
++
++const useSuggestionCache = (): AutoLookSuggestion[] => {
++  if (!suggestionCache) {
++    suggestionCache = (autoLooks as unknown as Array<{
++      event: EventType;
++      moment: LookMoment;
++      selections: Record<ProductCategory, string>;
++      moodboard: string[];
++      description: string;
++    }>).map((item) => ({
++      event: item.event,
++      moment: item.moment,
++      moodboard: item.moodboard,
++      description: item.description,
++      selections: mapSelectionsFromIds(item.selections),
++    }));
++  }
++  return suggestionCache;
++};
++
++export const LookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
++  const [profile, setProfile] = useState<Profile>(defaultProfile);
++  const [looks, setLooks] = useState<Look[]>([]);
++
++  const updateProfile = useCallback((nextProfile: Partial<Profile>) => {
++    setProfile((prev) => ({ ...prev, ...nextProfile }));
++  }, []);
++
++  const saveLook = useCallback(
++    (look: Omit<Look, 'id' | 'createdAt' | 'updatedAt'>): Look => {
++      const now = new Date().toISOString();
++      const newLook: Look = {
++        ...look,
++        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
++        createdAt: now,
++        updatedAt: now,
++      };
++      setLooks((prev) => [newLook, ...prev]);
++      return newLook;
++    },
++    []
++  );
++
++  const updateLook = useCallback((id: string, partial: Partial<Look>) => {
++    setLooks((prev) =>
++      prev.map((look) =>
++        look.id === id
++          ? {
++              ...look,
++              ...partial,
++              selections: partial.selections ? { ...look.selections, ...partial.selections } : look.selections,
++              updatedAt: new Date().toISOString(),
++            }
++          : look
++      )
++    );
++  }, []);
++
++  const deleteLook = useCallback((id: string) => {
++    setLooks((prev) => prev.filter((look) => look.id !== id));
++  }, []);
++
++  const duplicateLook = useCallback(
++    (id: string): Look | null => {
++      const original = looks.find((item) => item.id === id);
++      if (!original) return null;
++      const { id: _omitId, createdAt: _createdAt, updatedAt: _updatedAt, ...rest } = original;
++      return saveLook({ ...rest, name: `${original.name} (copia)` });
++    },
++    [looks, saveLook]
++  );
++
++  const findNightSuggestion = useCallback(
++    (look: Look): AutoLookSuggestion | undefined => {
++      const suggestions = useSuggestionCache();
++      return suggestions.find((item) => item.event === look.event && item.moment === 'Noche');
++    },
++    []
++  );
++
++  const transformLookToNight = useCallback(
++    (id: string): Look | null => {
++      const existing = looks.find((look) => look.id === id);
++      if (!existing) return null;
++      if (existing.moment === 'Noche') return existing;
++
++      const suggestion = existing.event ? findNightSuggestion(existing) : undefined;
++      const nightSelections = suggestion?.selections ?? existing.selections;
++      const enhancedTutorial = [...tutorials.default, ...tutorials.nightBoost];
++      const now = new Date().toISOString();
++
++      const transformed: Look = {
++        ...existing,
++        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
++        name: `${existing.name} ➜ Noche`,
++        moment: 'Noche',
++        selections: nightSelections,
++        tutorialSteps: enhancedTutorial,
++        createdAt: now,
++        updatedAt: now,
++      };
++
++      setLooks((prev) => [transformed, ...prev]);
++      return transformed;
++    },
++    [findNightSuggestion, looks]
++  );
++
++  const getAutoSuggestions = useCallback(() => useSuggestionCache(), []);
++
++  const buildLookFromSuggestion = useCallback(
++    (suggestion: AutoLookSuggestion, name?: string): Look => ({
++      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
++      name: name ?? `${suggestion.event} ${suggestion.moment}`,
++      selections: suggestion.selections,
++      createdAt: new Date().toISOString(),
++      updatedAt: new Date().toISOString(),
++      mode: 'automático',
++      event: suggestion.event,
++      moment: suggestion.moment,
++      tutorialSteps: tutorials.default,
++    }),
++    []
++  );
++
++  const value = useMemo<LookContextValue>(
++    () => ({
++      profile,
++      updateProfile,
++      productOptions: productOptionsByCategory,
++      skinTones: skinData.skinTones,
++      undertones: skinData.undertones,
++      stylePreferences: skinData.stylePreferences,
++      looks,
++      saveLook,
++      updateLook,
++      deleteLook,
++      duplicateLook,
++      transformLookToNight,
++      getAutoSuggestions,
++      buildLookFromSuggestion,
++    }),
++    [profile, updateProfile, looks, saveLook, updateLook, duplicateLook, transformLookToNight, getAutoSuggestions, buildLookFromSuggestion]
++  );
++
++  return <LookContext.Provider value={value}>{children}</LookContext.Provider>;
++};
++
++export const useLookContext = (): LookContextValue => {
++  const ctx = useContext(LookContext);
++  if (!ctx) {
++    throw new Error('useLookContext debe utilizarse dentro de LookProvider');
++  }
++  return ctx;
++};
++
++export const getEmptySelection = buildEmptySelection;
++export const getProductCategories = () => PRODUCT_CATEGORIES;
+diff --git a/src/screens/CreateLookScreen.tsx b/src/screens/CreateLookScreen.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..d15d40afa05c6b7857626c9094d4a2eb53454e61
+--- /dev/null
++++ b/src/screens/CreateLookScreen.tsx
+@@ -0,0 +1,235 @@
++import React, { useEffect, useMemo, useState } from 'react';
++import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
++import { StatusBar } from 'expo-status-bar';
++import ManualLookBuilder from '../components/ManualLookBuilder';
++import AutoLookGenerator from '../components/AutoLookGenerator';
++import TryOnModal from '../components/TryOnModal';
++import TutorialSteps from '../components/TutorialSteps';
++import { useLookContext, getEmptySelection } from '../providers/LookProvider';
++import { AutoLookSuggestion, EventType, LookMoment, LookSelection, ProductCategory, ProductOption } from '../types';
++import tutorials from '../data/tutorials.json';
++
++const CreateLookScreen: React.FC = () => {
++  const { saveLook } = useLookContext();
++  const [lookName, setLookName] = useState('Mi nuevo look');
++  const [mode, setMode] = useState<'manual' | 'automático'>('manual');
++  const [moment, setMoment] = useState<LookMoment>('Día');
++  const [event, setEvent] = useState<EventType | undefined>();
++  const [selections, setSelections] = useState<LookSelection>(getEmptySelection());
++  const [tutorialSteps, setTutorialSteps] = useState<string[]>(tutorials.default);
++  const [isTryOnVisible, setTryOnVisible] = useState(false);
++
++  const selectedCount = useMemo(
++    () => Object.values(selections).filter((item) => item !== null).length,
++    [selections]
++  );
++
++  const handleSelectProduct = (category: ProductCategory, product: ProductOption) => {
++    setMode('manual');
++    setSelections((prev) => ({ ...prev, [category]: product }));
++  };
++
++  const handleApplySuggestion = (suggestion: AutoLookSuggestion) => {
++    setMode('automático');
++    setEvent(suggestion.event);
++    setMoment(suggestion.moment);
++    setSelections(suggestion.selections);
++    setTutorialSteps(
++      suggestion.moment === 'Noche' ? [...tutorials.default, ...tutorials.nightBoost] : tutorials.default
++    );
++    setLookName(`${suggestion.event} ${suggestion.moment}`);
++  };
++
++  const resetForm = () => {
++    setLookName('Mi nuevo look');
++    setMode('manual');
++    setMoment('Día');
++    setEvent(undefined);
++    setSelections(getEmptySelection());
++    setTutorialSteps(tutorials.default);
++  };
++
++  useEffect(() => {
++    if (moment === 'Noche') {
++      setTutorialSteps([...tutorials.default, ...tutorials.nightBoost]);
++    } else {
++      setTutorialSteps(tutorials.default);
++    }
++  }, [moment]);
++
++  const handleSave = () => {
++    if (!lookName.trim()) {
++      Alert.alert('Nombre requerido', 'Añade un nombre para guardar tu look.');
++      return;
++    }
++    if (selectedCount === 0) {
++      Alert.alert('Selecciona productos', 'Elige al menos un producto para guardar el look.');
++      return;
++    }
++
++    saveLook({
++      name: lookName.trim(),
++      mode,
++      moment,
++      event,
++      selections,
++      tutorialSteps,
++    });
++    Alert.alert('Look guardado', 'Puedes encontrarlo en la sección Mis looks.');
++    resetForm();
++  };
++
++  return (
++    <View style={styles.wrapper}>
++      <StatusBar style="dark" />
++      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
++        <View style={styles.header}>
++          <Text style={styles.title}>Crear look</Text>
++          <Text style={styles.subtitle}>
++            Arma manualmente tu look o deja que Holoskin lo genere según el evento. Guarda, prueba y transforma cuando
++            quieras.
++          </Text>
++        </View>
++
++        <View style={styles.sectionCard}>
++          <Text style={styles.sectionTitle}>Nombre del look</Text>
++          <TextInput style={styles.input} value={lookName} onChangeText={setLookName} placeholder="Mi look radiante" />
++          <View style={styles.momentRow}>
++            {(['Día', 'Noche'] as LookMoment[]).map((option) => (
++              <TouchableOpacity
++                key={option}
++                style={[styles.momentChip, moment === option && styles.momentChipActive]}
++                onPress={() => setMoment(option)}
++              >
++                <Text style={[styles.momentChipText, moment === option && styles.momentChipTextActive]}>{option}</Text>
++              </TouchableOpacity>
++            ))}
++          </View>
++          <Text style={styles.badgeText}>Modo actual: {mode}</Text>
++        </View>
++
++        <View style={styles.sectionCard}>
++          <ManualLookBuilder selections={selections} onSelect={handleSelectProduct} />
++        </View>
++
++        <View style={styles.sectionCard}>
++          <AutoLookGenerator onApply={handleApplySuggestion} />
++        </View>
++
++        <TutorialSteps steps={tutorialSteps} />
++
++        <View style={styles.actionsRow}>
++          <TouchableOpacity style={styles.secondaryButton} onPress={() => setTryOnVisible(true)}>
++            <Text style={styles.secondaryText}>Probar virtual</Text>
++          </TouchableOpacity>
++          <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
++            <Text style={styles.primaryText}>Guardar look ({selectedCount}/6)</Text>
++          </TouchableOpacity>
++        </View>
++      </ScrollView>
++
++      <TryOnModal visible={isTryOnVisible} selections={selections} onClose={() => setTryOnVisible(false)} />
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  wrapper: {
++    flex: 1,
++    backgroundColor: '#fdf8f5',
++  },
++  content: {
++    padding: 24,
++    gap: 24,
++    paddingBottom: 120,
++  },
++  header: {
++    gap: 12,
++  },
++  title: {
++    fontSize: 28,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  subtitle: {
++    color: '#6f5a5f',
++  },
++  sectionCard: {
++    backgroundColor: '#fff',
++    borderRadius: 24,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 18,
++    gap: 16,
++  },
++  sectionTitle: {
++    fontSize: 16,
++    fontWeight: '600',
++    color: '#3f2a2a',
++  },
++  input: {
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    borderRadius: 14,
++    padding: 14,
++    backgroundColor: '#fff',
++  },
++  momentRow: {
++    flexDirection: 'row',
++    gap: 12,
++  },
++  momentChip: {
++    flex: 1,
++    paddingVertical: 10,
++    borderRadius: 12,
++    borderWidth: 1,
++    borderColor: '#ecd9e4',
++    alignItems: 'center',
++    backgroundColor: '#fff',
++  },
++  momentChipActive: {
++    backgroundColor: '#fdf3f8',
++    borderColor: '#d17ca7',
++  },
++  momentChipText: {
++    color: '#6f5a5f',
++  },
++  momentChipTextActive: {
++    color: '#d17ca7',
++    fontWeight: '700',
++  },
++  badgeText: {
++    color: '#b08d99',
++    fontSize: 13,
++  },
++  actionsRow: {
++    flexDirection: 'row',
++    gap: 12,
++  },
++  secondaryButton: {
++    flex: 1,
++    borderRadius: 14,
++    borderWidth: 1,
++    borderColor: '#d17ca7',
++    paddingVertical: 14,
++    alignItems: 'center',
++    backgroundColor: '#fff',
++  },
++  secondaryText: {
++    color: '#d17ca7',
++    fontWeight: '600',
++  },
++  primaryButton: {
++    flex: 1.2,
++    borderRadius: 14,
++    backgroundColor: '#d17ca7',
++    paddingVertical: 14,
++    alignItems: 'center',
++  },
++  primaryText: {
++    color: '#fff',
++    fontWeight: '700',
++  },
++});
++
++export default CreateLookScreen;
+diff --git a/src/screens/LookDetailScreen.tsx b/src/screens/LookDetailScreen.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..1938d55763f3d0fde5c0a3b606200756df66ee4a
+--- /dev/null
++++ b/src/screens/LookDetailScreen.tsx
+@@ -0,0 +1,281 @@
++import React, { useEffect, useMemo, useState } from 'react';
++import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
++import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
++import { StatusBar } from 'expo-status-bar';
++import { RootStackParamList } from '../navigation/AppNavigator';
++import { useLookContext, getEmptySelection } from '../providers/LookProvider';
++import ManualLookBuilder from '../components/ManualLookBuilder';
++import TutorialSteps from '../components/TutorialSteps';
++import TryOnModal from '../components/TryOnModal';
++import tutorials from '../data/tutorials.json';
++import { LookMoment, LookSelection, ProductCategory, ProductOption } from '../types';
++
++const LookDetailScreen: React.FC = () => {
++  const route = useRoute<RouteProp<RootStackParamList, 'LookDetail'>>();
++  const navigation = useNavigation();
++  const { looks, updateLook, deleteLook, duplicateLook, transformLookToNight } = useLookContext();
++  const [isTryOnVisible, setTryOnVisible] = useState(false);
++
++  const look = useMemo(() => looks.find((item) => item.id === route.params.lookId), [looks, route.params.lookId]);
++
++  const [name, setName] = useState('');
++  const [moment, setMoment] = useState<LookMoment>('Día');
++  const [selections, setSelections] = useState<LookSelection>(getEmptySelection());
++
++  useEffect(() => {
++    if (!look) {
++      return;
++    }
++    setName(look.name);
++    setMoment(look.moment);
++    setSelections({ ...look.selections });
++  }, [look]);
++
++  const handleUpdateProduct = (category: ProductCategory, product: ProductOption) => {
++    setSelections((prev) => ({ ...prev, [category]: product }));
++  };
++
++  const previewTutorial = useMemo(() => {
++    if (!look) return tutorials.default;
++    return moment === 'Noche' ? [...tutorials.default, ...tutorials.nightBoost] : look.tutorialSteps;
++  }, [look, moment]);
++
++  const handleSaveChanges = () => {
++    if (!look) return;
++    if (!name.trim()) {
++      Alert.alert('Nombre requerido', 'El look necesita un nombre.');
++      return;
++    }
++    updateLook(look.id, { name: name.trim(), moment, selections, tutorialSteps: previewTutorial });
++    Alert.alert('Cambios guardados', 'Tu look ha sido actualizado.');
++  };
++
++  const handleDelete = () => {
++    if (!look) return;
++    Alert.alert('Eliminar look', '¿Seguro que deseas eliminar este look?', [
++      { text: 'Cancelar', style: 'cancel' },
++      {
++        text: 'Eliminar',
++        style: 'destructive',
++        onPress: () => {
++          deleteLook(look.id);
++          navigation.goBack();
++        },
++      },
++    ]);
++  };
++
++  const handleTransform = () => {
++    if (!look) return;
++    const transformed = transformLookToNight(look.id);
++    if (transformed) {
++      navigation.navigate('LookDetail', { lookId: transformed.id });
++    }
++  };
++
++  if (!look) {
++    return (
++      <View style={styles.wrapper}>
++        <Text style={styles.missingText}>No encontramos este look. Vuelve a Mis looks.</Text>
++      </View>
++    );
++  }
++
++  return (
++    <View style={styles.wrapper}>
++      <StatusBar style="dark" />
++      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
++        <View style={styles.header}>
++          <Text style={styles.subtitle}>Detalle del look</Text>
++          <Text style={styles.title}>{look.name}</Text>
++          <Text style={styles.metaText}>Creado {new Date(look.createdAt).toLocaleDateString()}</Text>
++        </View>
++
++        <View style={styles.card}>
++          <Text style={styles.label}>Nombre</Text>
++          <TextInput value={name} onChangeText={setName} style={styles.input} />
++          <View style={styles.momentRow}>
++            {(['Día', 'Noche'] as LookMoment[]).map((option) => (
++              <TouchableOpacity
++                key={option}
++                style={[styles.momentChip, moment === option && styles.momentChipActive]}
++                onPress={() => setMoment(option)}
++              >
++                <Text style={[styles.momentText, moment === option && styles.momentTextActive]}>{option}</Text>
++              </TouchableOpacity>
++            ))}
++          </View>
++          <Text style={styles.badge}>Modo {look.mode}</Text>
++          {look.event ? <Text style={styles.badge}>Evento: {look.event}</Text> : null}
++        </View>
++
++        <View style={styles.card}>
++          <Text style={styles.label}>Productos seleccionados</Text>
++          <ManualLookBuilder selections={selections} onSelect={handleUpdateProduct} />
++        </View>
++
++        <TutorialSteps steps={previewTutorial} />
++
++        <View style={styles.actionsRow}>
++          <TouchableOpacity style={styles.secondaryButton} onPress={() => duplicateLook(look.id)}>
++            <Text style={styles.secondaryText}>Duplicar</Text>
++          </TouchableOpacity>
++          <TouchableOpacity style={styles.secondaryButton} onPress={() => setTryOnVisible(true)}>
++            <Text style={styles.secondaryText}>Probar virtual</Text>
++          </TouchableOpacity>
++        </View>
++
++        <View style={styles.actionsRow}>
++          <TouchableOpacity style={styles.primaryButton} onPress={handleSaveChanges}>
++            <Text style={styles.primaryText}>Guardar cambios</Text>
++          </TouchableOpacity>
++          {look.moment === 'Día' && (
++            <TouchableOpacity style={styles.transformButton} onPress={handleTransform}>
++              <Text style={styles.transformText}>Transformar a noche</Text>
++            </TouchableOpacity>
++          )}
++        </View>
++
++        <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
++          <Text style={styles.deleteText}>Eliminar look</Text>
++        </TouchableOpacity>
++      </ScrollView>
++
++      <TryOnModal visible={isTryOnVisible} selections={selections} onClose={() => setTryOnVisible(false)} />
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  wrapper: {
++    flex: 1,
++    backgroundColor: '#fdf8f5',
++  },
++  content: {
++    padding: 24,
++    gap: 20,
++    paddingBottom: 120,
++  },
++  header: {
++    gap: 6,
++  },
++  subtitle: {
++    color: '#b08d99',
++    fontSize: 14,
++  },
++  title: {
++    fontSize: 28,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  metaText: {
++    color: '#6f5a5f',
++  },
++  card: {
++    backgroundColor: '#fff',
++    borderRadius: 20,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 18,
++    gap: 14,
++  },
++  label: {
++    fontSize: 16,
++    fontWeight: '600',
++    color: '#3f2a2a',
++  },
++  input: {
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    borderRadius: 14,
++    padding: 14,
++    backgroundColor: '#fff',
++  },
++  momentRow: {
++    flexDirection: 'row',
++    gap: 12,
++  },
++  momentChip: {
++    flex: 1,
++    paddingVertical: 10,
++    borderRadius: 12,
++    borderWidth: 1,
++    borderColor: '#ecd9e4',
++    alignItems: 'center',
++    backgroundColor: '#fff',
++  },
++  momentChipActive: {
++    borderColor: '#d17ca7',
++    backgroundColor: '#fdf3f8',
++  },
++  momentText: {
++    color: '#6f5a5f',
++  },
++  momentTextActive: {
++    color: '#d17ca7',
++    fontWeight: '700',
++  },
++  badge: {
++    color: '#6f5a5f',
++  },
++  actionsRow: {
++    flexDirection: 'row',
++    gap: 12,
++  },
++  primaryButton: {
++    flex: 1,
++    borderRadius: 14,
++    backgroundColor: '#d17ca7',
++    paddingVertical: 14,
++    alignItems: 'center',
++  },
++  primaryText: {
++    color: '#fff',
++    fontWeight: '700',
++  },
++  transformButton: {
++    flex: 1,
++    borderRadius: 14,
++    borderWidth: 1,
++    borderColor: '#d17ca7',
++    paddingVertical: 14,
++    alignItems: 'center',
++    backgroundColor: '#fff',
++  },
++  transformText: {
++    color: '#d17ca7',
++    fontWeight: '700',
++  },
++  secondaryButton: {
++    flex: 1,
++    borderRadius: 14,
++    borderWidth: 1,
++    borderColor: '#d17ca7',
++    paddingVertical: 14,
++    alignItems: 'center',
++    backgroundColor: '#fff',
++  },
++  secondaryText: {
++    color: '#d17ca7',
++    fontWeight: '600',
++  },
++  deleteButton: {
++    alignSelf: 'center',
++    paddingVertical: 12,
++    paddingHorizontal: 24,
++    borderRadius: 14,
++    borderWidth: 1,
++    borderColor: '#d17ca7',
++  },
++  deleteText: {
++    color: '#d17ca7',
++    fontWeight: '600',
++  },
++  missingText: {
++    marginTop: 120,
++    textAlign: 'center',
++    color: '#6f5a5f',
++  },
++});
++
++export default LookDetailScreen;
+diff --git a/src/screens/MyLooksScreen.tsx b/src/screens/MyLooksScreen.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..b5973ab5d2d7fc3612298d93d0285d6edd55169e
+--- /dev/null
++++ b/src/screens/MyLooksScreen.tsx
+@@ -0,0 +1,90 @@
++import React from 'react';
++import { View, Text, FlatList, StyleSheet } from 'react-native';
++import { useNavigation } from '@react-navigation/native';
++import { StatusBar } from 'expo-status-bar';
++import { useLookContext } from '../providers/LookProvider';
++import LookCard from '../components/LookCard';
++import { RootStackParamList } from '../navigation/AppNavigator';
++import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
++
++const MyLooksScreen: React.FC = () => {
++  const { looks, duplicateLook } = useLookContext();
++  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
++
++  return (
++    <View style={styles.wrapper}>
++      <StatusBar style="dark" />
++      <FlatList
++        contentContainerStyle={styles.content}
++        data={looks}
++        keyExtractor={(item) => item.id}
++        ListHeaderComponent={() => (
++          <View style={styles.header}>
++            <Text style={styles.title}>Mis looks</Text>
++            <Text style={styles.subtitle}>
++              Guarda tus propuestas favoritas, edítalas, duplícalas o transforma un look de día a noche.
++            </Text>
++          </View>
++        )}
++        ListEmptyComponent={() => (
++          <View style={styles.emptyState}>
++            <Text style={styles.emptyTitle}>Aún no tienes looks guardados</Text>
++            <Text style={styles.emptyText}>Crea tu primer look desde la pestaña "Crear look".</Text>
++          </View>
++        )}
++        renderItem={({ item }) => (
++          <LookCard
++            look={item}
++            onPress={() => navigation.navigate('LookDetail', { lookId: item.id })}
++            onDuplicate={() => duplicateLook(item.id)}
++          />
++        )}
++        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
++      />
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  wrapper: {
++    flex: 1,
++    backgroundColor: '#fdf8f5',
++  },
++  content: {
++    paddingHorizontal: 24,
++    paddingBottom: 120,
++    paddingTop: 32,
++    gap: 16,
++  },
++  header: {
++    gap: 8,
++    marginBottom: 12,
++  },
++  title: {
++    fontSize: 28,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  subtitle: {
++    color: '#6f5a5f',
++  },
++  emptyState: {
++    backgroundColor: '#fff',
++    borderRadius: 20,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    padding: 24,
++    gap: 8,
++    alignItems: 'flex-start',
++  },
++  emptyTitle: {
++    fontSize: 18,
++    fontWeight: '700',
++    color: '#3f2a2a',
++  },
++  emptyText: {
++    color: '#6f5a5f',
++  },
++});
++
++export default MyLooksScreen;
+diff --git a/src/screens/ProfileScreen.tsx b/src/screens/ProfileScreen.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..df75410c7930ce04e9056ac94ee082117354c50a
+--- /dev/null
++++ b/src/screens/ProfileScreen.tsx
+@@ -0,0 +1,79 @@
++import React from 'react';
++import { View, Text, ScrollView, StyleSheet } from 'react-native';
++import { StatusBar } from 'expo-status-bar';
++import ProfileForm from '../components/ProfileForm';
++import { useLookContext } from '../providers/LookProvider';
++
++const ProfileScreen: React.FC = () => {
++  const { profile, updateProfile, stylePreferences } = useLookContext();
++
++  const selectedStyles = profile.stylePreferences
++    .map((prefId) => stylePreferences.find((pref) => pref.id === prefId)?.label ?? null)
++    .filter((label): label is string => Boolean(label));
++
++  return (
++    <View style={styles.wrapper}>
++      <StatusBar style="dark" />
++      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
++        <View style={styles.header}>
++          <Text style={styles.title}>Holoskin</Text>
++          <Text style={styles.subtitle}>Asistente de maquillaje personalizado</Text>
++        </View>
++        <ProfileForm value={profile} onChange={updateProfile} />
++        <View style={styles.summaryCard}>
++          <Text style={styles.summaryTitle}>Resumen rápido</Text>
++          <Text style={styles.summaryText}>• Tono: {profile.skinTone?.name ?? 'Sin definir'}</Text>
++          <Text style={styles.summaryText}>• Subtono: {profile.undertone?.name ?? 'Sin definir'}</Text>
++          <Text style={styles.summaryText}>• Tipo de piel: {profile.skinType ?? 'Sin definir'}</Text>
++          <Text style={styles.summaryText}>
++            • Estilo: {selectedStyles.length ? selectedStyles.join(', ') : 'Añade tus vibes'}
++          </Text>
++        </View>
++      </ScrollView>
++    </View>
++  );
++};
++
++const styles = StyleSheet.create({
++  wrapper: {
++    flex: 1,
++    backgroundColor: '#fdf8f5',
++  },
++  content: {
++    paddingHorizontal: 24,
++    paddingTop: 32,
++    paddingBottom: 80,
++    gap: 24,
++  },
++  header: {
++    gap: 8,
++  },
++  title: {
++    fontSize: 32,
++    fontWeight: '700',
++    color: '#3c2b2e',
++  },
++  subtitle: {
++    fontSize: 16,
++    color: '#6f5a5f',
++  },
++  summaryCard: {
++    backgroundColor: '#fff',
++    padding: 18,
++    borderRadius: 18,
++    borderWidth: 1,
++    borderColor: '#f1dfe9',
++    gap: 8,
++  },
++  summaryTitle: {
++    fontWeight: '700',
++    fontSize: 16,
++    color: '#3f2a2a',
++  },
++  summaryText: {
++    color: '#6f5a5f',
++    fontSize: 14,
++  },
++});
++
++export default ProfileScreen;
+diff --git a/src/types/index.ts b/src/types/index.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..bf74ac1aacf07d50bc19ceaa719ed383d9efdeb7
+--- /dev/null
++++ b/src/types/index.ts
+@@ -0,0 +1,77 @@
++export type SkinTone = {
++  id: string;
++  name: string;
++  hex: string;
++};
++
++export type UndertoneOption = {
++  id: string;
++  name: string;
++  description: string;
++};
++
++export type SkinTypeOption = 'Seca' | 'Mixta' | 'Grasa' | 'Normal' | 'Sensible';
++
++export type StylePreference = {
++  id: string;
++  label: string;
++};
++
++export type ProductOption = {
++  id: string;
++  name: string;
++  brand: string;
++  hex?: string;
++  finish?: string;
++  image?: string;
++};
++
++export type ProductCategory =
++  | 'Base'
++  | 'Corrector'
++  | 'Sombras'
++  | 'Blush'
++  | 'Eyeliner'
++  | 'Labial';
++
++export type LookSelection = Record<ProductCategory, ProductOption | null>;
++
++export type LookMoment = 'Día' | 'Noche';
++
++export type EventType =
++  | 'Boda'
++  | 'Bautizo'
++  | 'Almuerzo familiar'
++  | 'Fiesta de día'
++  | 'Fiesta de noche'
++  | 'Discoteca'
++  | 'Reunión importante';
++
++export type Look = {
++  id: string;
++  name: string;
++  selections: LookSelection;
++  createdAt: string;
++  updatedAt: string;
++  mode: 'manual' | 'automático';
++  event?: EventType;
++  moment: LookMoment;
++  tutorialSteps: string[];
++};
++
++export type Profile = {
++  name: string;
++  skinTone: SkinTone | null;
++  undertone: UndertoneOption | null;
++  skinType: SkinTypeOption | null;
++  stylePreferences: string[];
++  notes?: string;
++};
++
++export type AutoLookSuggestion = {
++  event: EventType;
++  moment: LookMoment;
++  selections: LookSelection;
++  moodboard: string[];
++  description: string;
++};
+diff --git a/tsconfig.json b/tsconfig.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..d943f327f6fa09c0a2b4c426aa08b94fa46e2284
+--- /dev/null
++++ b/tsconfig.json
+@@ -0,0 +1,15 @@
++{
++  "compilerOptions": {
++    "allowSyntheticDefaultImports": true,
++    "esModuleInterop": true,
++    "jsx": "react-native",
++    "lib": ["dom", "esnext"],
++    "moduleResolution": "node",
++    "noEmit": true,
++    "resolveJsonModule": true,
++    "skipLibCheck": true,
++    "strict": true,
++    "types": ["react", "react-native"]
++  },
++  "include": ["**/*.ts", "**/*.tsx", "index.js"]
++}
+ 
+EOF
+)
